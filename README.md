@@ -20,12 +20,16 @@ These setup instructions may not be exact to your needs, but it should be suffic
 This presumes you already have MSI Afterburner installed and configured.
 
 1. Download the two scripts from this repository.
-2. Download [USBDeview]()
+2. Download [USBDeview](http://www.nirsoft.net/utils/usb_devices_view.html)
 3. Set USBDeview to startup on reboot.
   * Make a shortcut in `C:\Users\YOURUSER\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\`
 4. In USBDeview, go to `Options->Advanced Options`. Enable the options to execute a command for inserting and unplugging a USB device. Put in the path and script name for the two scripts you downloaded. Then add `"%vid_hex%" "%pid_hex"` after as parameters.
   * `C:\Users\YOURUSER\Desktop\usb-plugged-in.bat "%vid_hex%" "%pid_hex%"`
   * `C:\Users\YOURUSER\Desktop\usb-plugged-out.bat "%vid_hex%" "%pid_hex%"`
+5. In MSI Afterburner, save your desired overclock settings for nicehash in profile #2.
+6. Also in Afterburner, reset the settings to default, then save that in profile #5.
+  * I couldn't find a command line argument to reset overclock settings to default, so I simply used profile 5 with defaults saved there instead.
 
+Depending on where your miner and afterburner programs are located, you may have to modify the script.
 
-Depending on where your miner and afterburner programs are located, you may have to modify the script a bit to point to  their locations.
+You may need to set usbdeview to run as an administrator.
