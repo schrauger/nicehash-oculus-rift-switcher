@@ -1,11 +1,12 @@
 @ECHO OFF
 
-
+REM only allow a single copy of the script at a time. usbdeview tends to fire this script multiple times.
 if exist "C:\Temp\usb-plugged-in-lock%1%2.txt" goto alreadyrunning
 
 set /a randomnum=%RANDOM%
 echo %randomnum%>C:\Temp\usb-plugged-in-lock%1%2.txt
-REM title usb-plugged-in-%randomnum%.bat
+
+REM scripts can fire so close that they both create a file. therefore, use random numbers to overwrite the file, and wait. then read the file. if it's not the same random number this script saved, exit to let the other script run.
 timeout 2
 set /p testisme= <C:\Temp\usb-plugged-in-lock%1%2.txt
 echo %testisme%
@@ -14,23 +15,24 @@ if not %testisme%==%randomnum% goto alreadyrunning
 
 del C:\Temp\usb-plugged-in-lock%1%2.txt
 
+REM stupidly, batch random numbers aren't all that random. a script run twice within the same millisecond or so can get the same random number. after waiting 2 seconds from the previous step, though, each script seems to divert enough that a second call to a random number gets different results. therefore, run the same step again, saving the number to a lock file and reading it.
 set /a randomnum=%RANDOM%
 echo %randomnum%>C:\Temp\usb-plugged-in-lock%1%2.txt
-REM title usb-plugged-in-%randomnum%.bat
 timeout 2
 set /p testisme= <C:\Temp\usb-plugged-in-lock%1%2.txt
 echo %testisme%
 echo %randomnum%
 if not %testisme%==%randomnum% goto alreadyrunning
 
+REM by this point, the script should be the only copy running.
+
 set tasklist=%windir%\System32\tasklist.exe
 set taskkill=%windir%\System32\taskkill.exe
 
 goto :MAIN
 
-goto :alreadyrunning
-
 :STOPPROC
+REM this subroutine loops until the requested program is fully terminated.
     set wasStopped=0
     set procFound=0
     set notFound_result=ERROR:
@@ -53,7 +55,7 @@ goto :alreadyrunning
 
 
 :MAIN 
-
+REM if the vendor and device id are the rift, run our actions.
 IF %1=="2833" (
   IF %2=="0330" (
     call :STOPPROC "MSIAfterburner.exe"
