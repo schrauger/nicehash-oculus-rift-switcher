@@ -1,7 +1,7 @@
 # nicehash-oculus-rift-switcher
 Automatically start/stop nicehash mining when the Oculus Rift headset is plugged in or unplugged.
 
-These two batch files are meant to be run when the Oculus Rift USB cable is plugged in or unplugged. When the computer detects the headset being plugged in, the script will kill the nicehash miner and reset the MSI Afterburner profile to standard settings.
+These two vbs files are meant to be run when the Oculus Rift USB cable is plugged in or unplugged. When the computer detects the headset being plugged in, the script will kill the nicehash miner and reset the MSI Afterburner profile to standard settings.
 
 When the headset is unplugged, it will change the Afterburner settings to Profile 2, then start NiceHash miner.
 
@@ -24,8 +24,8 @@ This presumes you already have MSI Afterburner installed and configured.
 3. Set USBDeview to startup on reboot.
   * Make a shortcut in `C:\Users\YOURUSER\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\`
 4. In USBDeview, go to `Options->Advanced Options`. Enable the options to execute a command for inserting and unplugging a USB device. Put in the path and script name for the two scripts you downloaded. Then add `"%vid_hex%" "%pid_hex"` after as parameters.
-  * `C:\Users\YOURUSER\Desktop\usb-plugged-in.bat "%vid_hex%" "%pid_hex%"`
-  * `C:\Users\YOURUSER\Desktop\usb-plugged-out.bat "%vid_hex%" "%pid_hex%"`
+  * `cscript C:\Users\YOURUSER\Desktop\usb-plugged-in.vbs "%vid_hex%" "%pid_hex%"`
+  * `cscript C:\Users\YOURUSER\Desktop\usb-plugged-out.vbs "%vid_hex%" "%pid_hex%"`
 5. In MSI Afterburner, save your desired overclock settings for nicehash in profile #2.
 6. Also in Afterburner, reset the settings to default, then save that in profile #5.
   * I couldn't find a command line argument to reset overclock settings to default, so I simply used profile 5 with defaults saved there instead.
