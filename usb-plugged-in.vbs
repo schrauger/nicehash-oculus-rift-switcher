@@ -27,7 +27,7 @@ Const HKEY_LOCAL_MACHINE = &H80000002
 strComputer = "."
 Set objRegistry = GetObject("winmgmts:\\" & strComputer & "\root\default:StdRegProv")
 strKeyPath = "SOFTWARE\Script Center\USB Plugged In"
-strValueName = "insert"
+strValueName = "removed"
 
 ' Check the registry key
 objRegistry.GetStringValue HKEY_LOCAL_MACHINE, strKeyPath, strValueName, strValue
@@ -68,14 +68,16 @@ End If
 Dim oShell : Set oShell = CreateObject("WScript.Shell")
 
 
-' Kill mining apps
+' Kill mining apps (shouldn't be running, but just in case, since we don't want them running twice)
 oShell.Run "taskkill /f /im MSIAfterburner.exe", , True
 oShell.Run "taskkill /f /im ""NiceHash Miner 2.exe"" ", , True
 oShell.Run "taskkill /f /im excavator.exe", , True
 oShell.Run "taskkill /f /im xmr-stak-cpu.exe", , True
 
-' Set gpu overclock to default
-oShell.Run """C:\Program Files (x86)\MSI Afterburner\MSIAfterburner.exe"" -profile5"
+
+' Set gpu overclock to mining. start miner.
+oShell.Run """C:\Program Files (x86)\MSI Afterburner\MSIAfterburner.exe"" -profile2"
+oShell.Run """C:\Program Files\NiceHash Miner 2\NiceHash Miner 2.exe"""
 
 ' WScript.Echo "Press [ENTER] to continue..."
 
