@@ -20,7 +20,8 @@ Dim TypeLib
   
 Set TypeLib = CreateObject("Scriptlet.TypeLib")
   
-strOurGuid = TypeLib.Guid
+' guids have null termination, and curly brackets. just get the number, to ease string comparisons.
+strOurGuid = Mid(TypeLib.Guid, 2, 36)
 
 Const HKEY_LOCAL_MACHINE = &H80000002
 strComputer = "."
@@ -51,9 +52,13 @@ Else
 
         ' technically, another script might actually be running. so, wait 1 second, then read the registry value again. if it matches our key, we're good. otherwise, we lose and must quit.
         WScript.Sleep 1000
-        objRegistry.GetStringValue HKEY_LOCAL_MACHINE, strKeyPath, strValueName, strValue
-        if not StrComp(strValue, strOurGuid, vbTextCompare) then
+        objRegistry.GetStringValue HKEY_LOCAL_MACHINE, strKeyPath, strValueName, strGuidValue
+        mycompare = StrComp(strGuidValue, strOurGuid, vbTextCompare)
+        if mycompare <> 0 then
             Wscript.Echo "We lost the race. Quitting."
+            Wscript.Echo strGuidValue
+            Wscript.Echo strOurGuid
+            Wscript.Echo mycompare
             Wscript.Quit
         end if
     End If
